@@ -4,11 +4,12 @@ function RedditService(http) {
 
     const service = this;
     
-    service.getRedditJSON = () => {
-        return $http({
-            method: "GET",
-            url: "https://www.reddit.com/r/aww.json"
-        });
+    service.callRedditApi = () => {
+        // return $http({
+        //     method: "GET",
+        //     url: "https://www.reddit.com/r/aww.json"
+        // });
+        return $http.get('https://www.reddit.com/r/aww.json') // what's the difference?
     };
 
 

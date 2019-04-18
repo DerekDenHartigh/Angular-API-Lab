@@ -4,30 +4,37 @@ function redditFeed(RedditService) {  //nameDisplay is the name-display.js contr
     const ctrl = this;
     ctrl.feed = [];//empty feed array to fill w/ reddit posts
 
-    ctrl.data = RedditService.getRedditJSON();
+/*
+    ctrl.feed should be an array of obj (posts), like this:
+    ctrl.feed = [
+        {title: "",
+        imgURL: ""}, rinse/repeat
+    ]
+*/
 
-//     $.get("https://www.reddit.com/r/aww/new.json", (data)=>{
-//         console.log(data);
-//     let title, thumb, link;
-//     let child = data.data.children;
-//     let n=0;
-//     while (n<10){ // this is for the bonus - limiting it to 10 posts
-//         child = data.data.children[n];
-//         title = child.data.title;
-//         thumb = child.data.thumbnail;
-//         link = child.data.permalink;
-//         console.log(thumb);
-//         $("body").append(`<h1 id="${n}">${title}</h1>`);
-//         $("body").append(`<div id="${n}"> <img src="${thumb}" width="300px" height="300px"/>`);
-//         $("body").append(`<a href="https://reddit.com${link}">Click Here for OP</a></div>`);
-//         $(`#${n}`).css("background-color", `#${Math.floor(Math.random()*10)}${Math.floor(Math.random()*10)}${Math.floor(Math.random()*10)}${Math.floor(Math.random()*10)}${Math.floor(Math.random()*10)}${Math.floor(Math.random()*10)}`)
-//         $(`#${n}`).css("color", `#${Math.floor(Math.random()*10)}${Math.floor(Math.random()*10)}${Math.floor(Math.random()*10)}${Math.floor(Math.random()*10)}${Math.floor(Math.random()*10)}${Math.floor(Math.random()*10)}`);
-//             // I was trying to do random colors for each post, but it seems to do it for all.
-//         n++;
-//     };
-    
-// });
-}      
+    ctrl.data = RedditService.callRedditApi();
+        ctrl.title = ctrl.data.children.data.title;
+        ctrl.img = ctrl.data.children.data.url;
+
+    ctrl.fillRedditFeed = () => {
+        return $q(function(resolve, reject) {  // reject never specified?
+                RedditService.callRedditApi()  // response is what the callRedditApi() returns?
+            .then( (response) => {
+                let n = 0;
+                while(n<10){ // to limit it to 10 posts?
+                    ctrl.feed.push(
+                        {title:${response.data.children[n].data.title},
+                         imgURL:${response.data.children[n].data.url}}
+                        );
+                    n++;
+                }.then(resolve())
+            });   
+        });
+    }
+
+    }
+
+
 angular
 .module('RedditApp')  
 .component('redditFeed', {
