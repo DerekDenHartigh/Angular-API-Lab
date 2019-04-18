@@ -12,33 +12,32 @@ function redditFeed(RedditService) {  //nameDisplay is the name-display.js contr
     ]
 */
 
-    ctrl.data = RedditService.callRedditApi();
-        ctrl.title = ctrl.data.children.data.title;
-        ctrl.img = ctrl.data.children.data.url;
+    // ctrl.data = RedditService.callRedditApi();
 
     ctrl.fillRedditFeed = () => {
         return $q(function(resolve, reject) {  // reject never specified?
                 RedditService.callRedditApi()  // response is what the callRedditApi() returns?
             .then( (response) => {
+                console.log(response);
                 let n = 0;
                 while(n<10){ // to limit it to 10 posts?
-                    ctrl.feed.push(
-                        {title:${response.data.children[n].data.title},
-                         imgURL:${response.data.children[n].data.url}}
+                    ctrl.feed.push(  // to fill the feed with the post objects containing titles and images
+                        {title:response.data.children[n].data.title,
+                         imgURL:response.data.children[n].data.url}
                         );
                     n++;
-                }.then(resolve())
-            });   
+                }
+            }).then(resolve());  // so that it doesn't resolve before the loop has run
         });
     }
-
-    }
+}
 
 
 angular
 .module('RedditApp')  
 .component('redditFeed', {
     template: `
+    <button ng-click="$ctrl.fillRedditFeed()">Feed ME</button>
     <div class="post-container" ng-repeat="post in crtl.feed">
         <h1 class="post-title">{{post.title}}<h1>
         <div class="post-image">{{post.imgURL}}<div>

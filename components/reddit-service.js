@@ -1,6 +1,6 @@
 "use strict";
 
-function RedditService(http) {
+function RedditService($http) {
 
     const service = this;
     
@@ -18,6 +18,7 @@ function RedditService(http) {
 angular
     .module("RedditApp")
     .service("RedditService", ["$http", RedditService]);
+
 
 /*
 Star Wars Service:
