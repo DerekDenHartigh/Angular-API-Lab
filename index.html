@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="RedditApp">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Reddit Feed</title>
+  <link href="https://fonts.googleapis.com/css?family=Geostar+Fill" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1 id="page-title">Bootleg Reddit:</h1>
+  <reddit-feed></reddit-feed>
+
+  <script src="https://code.angularjs.org/1.7.8/angular.js"></script>
+  <script src="app.module.js"></script>
+  <script src="components/reddit-service.js"></script>
+  <script src="components/reddit-feed/reddit-feed.js"></script>
+</body>
+</html>
+
+<!--My notes from following along with the setup:
+redditfeed.js, RedditFeed() controller, crtl.feed=[]; crtl.fetchSubreddit = ()=>{
+}
+
+
+pass the redditservice into the feed controller so that it has access to it, complex functions in the service
+copy star wars service as a starter template - delete all the functions, name changes
+
+
+
+-->
