@@ -32,7 +32,8 @@ function redditFeed(RedditService, $q, $scope) {  //nameDisplay is the name-disp
                         $scope.feed.push(  // to fill the feed with the post objects containing titles and images
                             {title:response.data.data.children[n].data.title,
                             imgURL:response.data.data.children[n].data.url,
-                            link:response.data.data.children[n].data.permalink}
+                            link:response.data.data.children[n].data.permalink,
+                            backupImg: response.data.data.children[n].data.thumbnail}
                             );
                         
                             n++;
@@ -64,9 +65,11 @@ angular
     template: `
     <button ng-click="$ctrl.runRedditFeed()">Feed ME</button>
     <div class="post-container" ng-repeat="post in feed">
-        <h1 class="post-title">{{post.title}}<h1>
-        <div class="post-image">{{post.imgURL}}<div>
-        <a class="post-link">www.reddit.com/r/{{post.link}}<a>
+        <h1 class="post-title">{{post.title}}</h1>
+        <!--<img src="{{post.imgURL}}" class="post-image"></img>-->  <!--higher quality, less likely to load-->
+        <img src="{{post.backupImg}}" class="post-image"></img>      <!--lower quality, always loads-->
+        <a class="post-link" target="_blank" href="https://reddit.com{{post.link}}">Link 2 teh Sauce</a>
+        
     </div>
     `,
     controller: redditFeed
