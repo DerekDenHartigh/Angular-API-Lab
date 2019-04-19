@@ -55,7 +55,17 @@ function redditFeed(RedditService, $q, $scope) {  //nameDisplay is the name-disp
         })
     }
 
+    ctrl.changeThread = (newThread)=>{
+        RedditService.changeThread(newThread)
+        .then( ()=> console.log('feed successfully changed'))
+        .catch((err)=> {
+            console.error(err);
+            alert("That isn't a real thread");
+        })
+    };
+
     ctrl.runRedditFeed();
+
 }
 
 
@@ -63,12 +73,17 @@ angular
 .module('RedditApp')  
 .component('redditFeed', {
     template: `
+    <div id="feed-selector">
+    <button id="thread-button" ng-click="$ctrl.changeThread($ctrl.thread)">Change Thread!</button>
+    <input id="feed-input" type="text" placeholder="r/? aww?" ng-model="$ctrl.thread">
+    <button id="feed-button" ng-click="$ctrl.runRedditFeed()">Feed Me</button>
+    </div>
+
     <div class="post-container" ng-repeat="post in feed">
         <h1 class="post-title">{{post.title}}</h1>
         <!--<img src="{{post.imgURL}}" class="post-image"></img>-->  <!--higher quality, less likely to load-->
         <a target="_blank" href="https://reddit.com{{post.link}}"><img src="{{post.backupImg}}" class="post-image"></img></a>      <!--lower quality, always loads-->
         <a class="post-link" target="_blank" href="https://reddit.com{{post.link}}">Link 2 teh Sauce</a>
-        
     </div>
     `,
     controller: redditFeed
