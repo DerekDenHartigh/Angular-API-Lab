@@ -21,13 +21,8 @@ function redditFeed(RedditService, $q, $scope) {  //nameDisplay is the name-disp
                     console.log(response);
                     let n = 0;
 
-// look into how to limiting request
+                    while(n < 10){ // to limit it to 10 posts
 
-                    while(n < 10){ // to limit it to 10 posts?
-                    
-                        // if (!response.data.children) { // this was to test out the catch
-                        //     reject('failure, you are');
-                        // }
                         $scope.feed.push(  // to fill the feed with the post objects containing titles and images
                             {title:response.data.data.children[n].data.title,
                             imgURL:response.data.data.children[n].data.url,
@@ -58,7 +53,10 @@ function redditFeed(RedditService, $q, $scope) {  //nameDisplay is the name-disp
 
     ctrl.changeThread = (newThread)=>{
         RedditService.changeThread(newThread)
-        .then( ()=> console.log('feed successfully changed'))
+        .then( ()=> {
+            console.log('feed successfully changed');
+            ctrl.runRedditFeed();
+        })
         .catch((err)=> {
             console.error(err);
             alert("That isn't a real thread");
@@ -75,9 +73,8 @@ angular
 .component('redditFeed', {
     template: `
     <div id="feed-selector">
-    <button id="thread-button" ng-click="$ctrl.changeThread($ctrl.thread)">Change Thread!</button>
-    <input id="feed-input" type="text" placeholder="r/?aww?" ng-model="$ctrl.thread">
-    <button id="feed-button" ng-click="$ctrl.runRedditFeed()">Feed Me</button>
+    <input id="feed-input" type="text" placeholder="input a thread:  r/______?" ng-model="$ctrl.thread">
+    <button id="feed-button" ng-click="$ctrl.changeThread($ctrl.thread)">Feed Me</button>
     </div>
 
     <div class="post-container" ng-repeat="post in feed">
@@ -92,126 +89,3 @@ angular
         thread: "@" //    3. Create and modify the redditFeed component to take a one-way (<) or string (@) binding for the subreddit name?
     }
 });
-
-/* star wars coomponents/controllers:
-
-function Crawler(StarWarsService, $q, $timeout, $rootScope) {
-    const ctrl = this;
-    
-    ctrl.$onInit = function() {
-        ctrl.crawler = [];
-        ctrl.show = false;
-    };
-
-    $rootScope.$on("$locationChangeSuccess", function(value) {
-        ctrl.crawler = [];
-        ctrl.show = false;
-
-        ctrl.getStarWarsCrawler()
-        .then( _ => ctrl.show = true ); 
-    });
-
-    ctrl.getStarWarsCrawler = () => {
-        // call star wars API
-        // attach to template one by one
-        return $q(function(resolve, reject) {
-             StarWarsService.callStarWarsAPI()
-            .then( (response) => {
-                ctrl.crawler.push(`Episode ${response.data.episode_id}: ${response.data.title}`);
-
-                let crawlerData = response.data.opening_crawl.split('\n');
-                ctrl.addToCrawler(crawlerData, 0, resolve);
-            });   
-        });
-    }
-
-    ctrl.nextEpisode = () => {
-        StarWarsService.nextEpisode();
-    }
-
-    ctrl.previousEpisode = () => {
-        StarWarsService.previousEpisode();
-    }
-
-    ctrl.addToCrawler = (crawlerData, index, resolve) => {
-
-        if ( index === crawlerData.length ) {
-            $timeout( () => {
-                resolve();
-            }, 800)
-        } else {
-            $timeout( () => {
-                ctrl.crawler.push(crawlerData[index]);
-            }, 800)
-            .then( _ => {
-                index++;
-            
-                ctrl.addToCrawler(crawlerData, index, resolve)
-             })
-        }
-    }
-  }
-  
-  angular.module('StarWarsCrawler').component('crawler', {
-    template: `
-    
-        <p ng-repeat="text in $ctrl.crawler track by $index">{{text}}</p>
-        <p ng-if="$ctrl.show">
-            <button ng-click="$ctrl.previousEpisode()">Previous Episode</button> 
-            <button ng-click="$ctrl.nextEpisode()">Next Episode</button> 
-        </p>
-
-    `, // or use templateUrl
-    controller: Crawler,
-    bindings: {
-      me: '<',
-      onDelete: '&',
-      onUpdate: '&'
-    }
-});
-
-
-
-function EpisodeCounter(StarWarsService, $rootScope) {
-    const ctrl = this;
-    
-    ctrl.getEpisode = function() {
-        return StarWarsService.getEpisode();
-    };
-
-    $rootScope.$on("$locationChangeSuccess", function(value) {
-        ctrl.getEpisode()
-    });
-  }
-  
-  angular.module('StarWarsCrawler').component('episodeCounter', {
-    template: `
-        <h2> Movie #{{$ctrl.getEpisode()}} </h2>
-    `, // or use templateUrl
-    controller: EpisodeCounter,
-});
-*/
-
-/* from api-lab using jquery
-
-    $.get("https://www.reddit.com/r/aww/new.json", (data)=>{
-        console.log(data);
-        let title, thumb, link;
-        let child = data.data.children;
-        let n=0;
-        while (n<10){ // this is for the bonus - limiting it to 10 posts
-            child = data.data.children[n];
-            title = child.data.title;
-            thumb = child.data.thumbnail;
-            link = child.data.permalink;
-            console.log(thumb);
-            $("body").append(`<h1 id="${n}">${title}</h1>`);
-            $("body").append(`<div id="${n}"> <img src="${thumb}" width="300px" height="300px"/>`);
-            $("body").append(`<a href="https://reddit.com${link}">Click Here for OP</a></div>`);
-            $(`#${n}`).css("background-color", `#${Math.floor(Math.random()*10)}${Math.floor(Math.random()*10)}${Math.floor(Math.random()*10)}${Math.floor(Math.random()*10)}${Math.floor(Math.random()*10)}${Math.floor(Math.random()*10)}`)
-            $(`#${n}`).css("color", `#${Math.floor(Math.random()*10)}${Math.floor(Math.random()*10)}${Math.floor(Math.random()*10)}${Math.floor(Math.random()*10)}${Math.floor(Math.random()*10)}${Math.floor(Math.random()*10)}`);
-                // I was trying to do random colors for each post, but it seems to do it for all.
-            n++;
-        };
-
-*/

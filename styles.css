@@ -112,12 +112,12 @@ background: var(--dark-pink);
     box-shadow: 0 4px var(--hot-pink);
 }
 
-#feed-button:active, #thread-button:active{
+#feed-button:active{
     box-shadow: 0 2px var(--dark-pink);
     transform: translateY(4px);
 }
 
-#feed-button:hover, #thread-button:hover{
+#feed-button:hover{
     background-color: var(--new-violet);
 }
 
@@ -131,6 +131,7 @@ background: var(--dark-pink);
     padding: 10px 5px;
     outline: none;
     text-align: center;
+    width: 70%;
 }
 
 ::placeholder {
