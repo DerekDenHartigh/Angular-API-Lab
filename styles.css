@@ -117,6 +117,10 @@ background: var(--dark-pink);
     transform: translateY(4px);
 }
 
+#feed-button:hover, #thread-button:hover{
+    background-color: var(--new-violet);
+}
+
 #feed-input{
     font-size: 1.5em;
     color: var(--hot-pink);
@@ -128,3 +132,16 @@ background: var(--dark-pink);
     outline: none;
     text-align: center;
 }
+
+::placeholder {
+    color: var(--dark-pink);
+    opacity: .8; /* Firefox */
+  }
+  
+  :-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: var(--dark-pink);
+  }
+  
+  ::-ms-input-placeholder { /* Microsoft Edge */
+    color: var(--dark-pink);
+  }

@@ -14,6 +14,7 @@ function redditFeed(RedditService, $q, $scope) {  //nameDisplay is the name-disp
 */
 
     ctrl.fillRedditFeed = () => {
+        $scope.feed = []; // resets the feed so that you don't just stack posts up, delete if you want a never ending page
         return $q(function(resolve, reject) {  // $q sets up a promise, after redditAPI is called successfully it executes the then()
                 RedditService.callRedditApi()  // response is what the callRedditApi() returns?
                 .then( (response) => {
@@ -64,7 +65,7 @@ function redditFeed(RedditService, $q, $scope) {  //nameDisplay is the name-disp
         })
     };
 
-    ctrl.runRedditFeed();
+    // ctrl.runRedditFeed();  // auto fills w/ default aww stuff specified in the service
 
 }
 
@@ -75,7 +76,7 @@ angular
     template: `
     <div id="feed-selector">
     <button id="thread-button" ng-click="$ctrl.changeThread($ctrl.thread)">Change Thread!</button>
-    <input id="feed-input" type="text" placeholder="r/? aww?" ng-model="$ctrl.thread">
+    <input id="feed-input" type="text" placeholder="r/?aww?" ng-model="$ctrl.thread">
     <button id="feed-button" ng-click="$ctrl.runRedditFeed()">Feed Me</button>
     </div>
 
@@ -86,7 +87,10 @@ angular
         <a class="post-link" target="_blank" href="https://reddit.com{{post.link}}">Link 2 teh Sauce</a>
     </div>
     `,
-    controller: redditFeed
+    controller: redditFeed,
+    bindings: {
+        thread: "@" //    3. Create and modify the redditFeed component to take a one-way (<) or string (@) binding for the subreddit name?
+    }
 });
 
 /* star wars coomponents/controllers:
