@@ -13,8 +13,6 @@ function redditFeed(RedditService, $q, $scope) {  //nameDisplay is the name-disp
     ]
 */
 
-    // ctrl.data = RedditService.callRedditApi();
-
     ctrl.fillRedditFeed = () => {
         return $q(function(resolve, reject) {  // $q sets up a promise, after redditAPI is called successfully it executes the then()
                 RedditService.callRedditApi()  // response is what the callRedditApi() returns?
@@ -56,6 +54,8 @@ function redditFeed(RedditService, $q, $scope) {  //nameDisplay is the name-disp
             alert('runRedditFeed() failed');
         })
     }
+
+    ctrl.runRedditFeed();
 }
 
 
@@ -63,11 +63,10 @@ angular
 .module('RedditApp')  
 .component('redditFeed', {
     template: `
-    <button ng-click="$ctrl.runRedditFeed()">Feed ME</button>
     <div class="post-container" ng-repeat="post in feed">
         <h1 class="post-title">{{post.title}}</h1>
         <!--<img src="{{post.imgURL}}" class="post-image"></img>-->  <!--higher quality, less likely to load-->
-        <img src="{{post.backupImg}}" class="post-image"></img>      <!--lower quality, always loads-->
+        <a target="_blank" href="https://reddit.com{{post.link}}"><img src="{{post.backupImg}}" class="post-image"></img></a>      <!--lower quality, always loads-->
         <a class="post-link" target="_blank" href="https://reddit.com{{post.link}}">Link 2 teh Sauce</a>
         
     </div>

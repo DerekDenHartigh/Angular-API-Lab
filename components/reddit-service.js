@@ -3,7 +3,7 @@
 function RedditService($http) {
 
     const service = this;
-    
+
     service.callRedditApi = () => {
         return $http.get('https://www.reddit.com/r/aww.json') // what's the difference?
 
