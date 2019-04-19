@@ -13,10 +13,10 @@ function redditFeed(RedditService, $q, $scope) {  //nameDisplay is the name-disp
     ]
 */
 
-    ctrl.fillRedditFeed = () => {
+    ctrl.fillRedditFeed = (newThread) => {
         $scope.feed = []; // resets the feed so that you don't just stack posts up, delete if you want a never ending page
         return $q(function(resolve, reject) {  // $q sets up a promise, after redditAPI is called successfully it executes the then()
-                RedditService.callRedditApi()  // response is what the callRedditApi() returns?
+                RedditService.callRedditApi(newThread)  // response is what the callRedditApi() returns?
                 .then( (response) => {
                     console.log(response);
                     let n = 0;
@@ -42,8 +42,8 @@ function redditFeed(RedditService, $q, $scope) {  //nameDisplay is the name-disp
         });
     }
 
-    ctrl.runRedditFeed = () => {
-        ctrl.fillRedditFeed()
+    ctrl.runRedditFeed = (newThread) => {
+        ctrl.fillRedditFeed(newThread)
         .then( () => console.log('runRedditFeed() Success!'))  // confirms successful resolution of fillRedditFeed() promise ($q)
         .catch( (err) => {  // in case things go wrong
             console.error(err);  // logs the wrench in my gears
@@ -51,19 +51,7 @@ function redditFeed(RedditService, $q, $scope) {  //nameDisplay is the name-disp
         })
     }
 
-    ctrl.changeThread = (newThread)=>{
-        RedditService.changeThread(newThread)
-        .then( ()=> {
-            console.log('feed successfully changed');
-            ctrl.runRedditFeed();
-        })
-        .catch((err)=> {
-            console.error(err);
-            alert("That isn't a real thread");
-        })
-    };
-
-    // ctrl.runRedditFeed();  // auto fills w/ default aww stuff specified in the service
+    // ctrl.runRedditFeed(aww);  // auto fills w/ default aww stuff specified in the service
 
 }
 
@@ -74,7 +62,7 @@ angular
     template: `
     <div id="feed-selector">
     <input id="feed-input" type="text" placeholder="input a thread:  r/______?" ng-model="$ctrl.thread">
-    <button id="feed-button" ng-click="$ctrl.changeThread($ctrl.thread)">Feed Me</button>
+    <button id="feed-button" ng-click="$ctrl.runRedditFeed($ctrl.thread)">Feed Me</button>
     </div>
 
     <div class="post-container" ng-repeat="post in feed">
