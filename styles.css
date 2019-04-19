@@ -42,6 +42,9 @@ body{
  .post-image{
     display: flex;
  }
+ .post-link{
+     display: flex;
+ }
 
  /* width */
 ::-webkit-scrollbar {

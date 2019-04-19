@@ -1,38 +1,43 @@
 "use strict";
 
-function redditFeed(RedditService, $q) {  //nameDisplay is the name-display.js controller, I'm passing the NameService service function into the controller as a parameter
+function redditFeed(RedditService, $q, $scope) {  //nameDisplay is the name-display.js controller, I'm passing the NameService service function into the controller as a parameter
     const ctrl = this;
-    ctrl.feed = [];//empty feed array to fill w/ reddit posts
+    $scope.feed = [];//empty feed array to fill w/ reddit posts
 
 /*
     ctrl.feed should be an array of obj (posts), like this:
     ctrl.feed = [
         {title: "",
-        imgURL: ""}, rinse/repeat
+        imgURL: "",
+        link: ""}, rinse/repeat
     ]
 */
 
     // ctrl.data = RedditService.callRedditApi();
 
     ctrl.fillRedditFeed = () => {
-        return $q(function(resolve, reject) {  // reject never specified?
+        return $q(function(resolve, reject) {  // $q sets up a promise, after redditAPI is called successfully it executes the then()
                 RedditService.callRedditApi()  // response is what the callRedditApi() returns?
                 .then( (response) => {
                     console.log(response);
                     let n = 0;
+
+// look into how to limiting request
+
                     while(n < 10){ // to limit it to 10 posts?
                     
                         // if (!response.data.children) { // this was to test out the catch
                         //     reject('failure, you are');
                         // }
-                        ctrl.feed.push(  // to fill the feed with the post objects containing titles and images
+                        $scope.feed.push(  // to fill the feed with the post objects containing titles and images
                             {title:response.data.data.children[n].data.title,
-                            imgURL:response.data.data.children[n].data.url}
+                            imgURL:response.data.data.children[n].data.url,
+                            link:response.data.data.children[n].data.permalink}
                             );
                         
                             n++;
 
-                        console.log(n);
+                        console.warn($scope.feed);
 
                         if ( n=== 10 ) {
                             resolve();
@@ -44,32 +49,12 @@ function redditFeed(RedditService, $q) {  //nameDisplay is the name-display.js c
 
     ctrl.runRedditFeed = () => {
         ctrl.fillRedditFeed()
-        .then( () => console.log('runRedditFeed() Success!'))  
+        .then( () => console.log('runRedditFeed() Success!'))  // confirms successful resolution of fillRedditFeed() promise ($q)
         .catch( (err) => {  // in case things go wrong
             console.error(err);  // logs the wrench in my gears
             alert('runRedditFeed() failed');
         })
     }
-
-    // ctrl.fillRedditFeed = () => {
-
-    //     $q(function() {
-
-    //     })
-    //         RedditService.callRedditApi()  // response is what the callRedditApi() returns?
-    //         .then( (response) => {
-    //             console.log(response);
-    //             let n = 0;
-    //             while(n<10){ // to limit it to 10 posts?
-    //                 ctrl.feed.push(  // to fill the feed with the post objects containing titles and images
-    //                     {title:response.data.data.children[n].data.title,
-    //                      imgURL:response.data.data.children[n].data.url}
-    //                     );
-    //                 n++;
-    //             }
-    //         }).then(resolve());  // so that it doesn't resolve before the loop has run
-    //     };
-
 }
 
 
@@ -78,12 +63,13 @@ angular
 .component('redditFeed', {
     template: `
     <button ng-click="$ctrl.runRedditFeed()">Feed ME</button>
-    <div class="post-container" ng-repeat="post in crtl.feed">
+    <div class="post-container" ng-repeat="post in feed">
         <h1 class="post-title">{{post.title}}<h1>
         <div class="post-image">{{post.imgURL}}<div>
+        <a class="post-link">www.reddit.com/r/{{post.link}}<a>
     </div>
     `,
-    controller: redditFeed,
+    controller: redditFeed
 });
 
 /* star wars coomponents/controllers:
