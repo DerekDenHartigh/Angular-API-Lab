@@ -26,6 +26,7 @@ reddit-feed{
     justify-items: flex-start;
     align-content: center;
     align-items: center;
+    width: 100%;
 }
 #page-title{
     font-size: 4em;
@@ -86,3 +87,62 @@ border-radius: 10px;
 ::-webkit-scrollbar-thumb:hover {
 background: var(--dark-pink); 
 }
+#feed-selector{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    justify-content: space-around;
+    align-content: center;
+    align-items: center;
+    margin: 10px 0px;
+    width: 80%;
+}
+
+#feed-button, #thread-button{
+    font-size: 1.5em;
+    color: var(--hot-pink);
+    background-color: var(--new-blue);
+    border-style: outset;
+    border: solid 2px var(--hot-pink);
+    border-radius: 15px;
+    padding: 10px;
+    outline: none;
+    text-align: center;
+    cursor: pointer;;
+    box-shadow: 0 4px var(--hot-pink);
+}
+
+#feed-button:active{
+    box-shadow: 0 2px var(--dark-pink);
+    transform: translateY(4px);
+}
+
+#feed-button:hover{
+    background-color: var(--new-violet);
+}
+
+#feed-input{
+    font-size: 1.5em;
+    color: var(--hot-pink);
+    background-color: var(--new-blue);
+    border: solid 2px var(--hot-pink);
+    border-style: inset;
+    border-radius: 5px;
+    padding: 10px 5px;
+    outline: none;
+    text-align: center;
+    width: 70%;
+}
+
+::placeholder {
+    color: var(--dark-pink);
+    opacity: .8; /* Firefox */
+  }
+  
+  :-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: var(--dark-pink);
+  }
+  
+  ::-ms-input-placeholder { /* Microsoft Edge */
+    color: var(--dark-pink);
+  }

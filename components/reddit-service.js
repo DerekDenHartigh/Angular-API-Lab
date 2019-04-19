@@ -1,11 +1,14 @@
 "use strict";
 
-function RedditService($http) {
+function RedditService($http, $q) {
 
     const service = this;
+    service.newThread = "";
 
-    service.callRedditApi = () => {
-        return $http.get('https://www.reddit.com/r/aww.json') // what's the difference?
+    service.callRedditApi = (newThread) => {
+        service.newThread = newThread;
+        console.log(`thread changed to `+service.newThread);
+        return $http.get(`https://www.reddit.com/r/${service.newThread}.json`) // what's the difference?
 
         // below are alternatives to the while loop I used in the controller
 
@@ -17,8 +20,6 @@ function RedditService($http) {
         // })
 
     };
-
-
 }
 
 angular
