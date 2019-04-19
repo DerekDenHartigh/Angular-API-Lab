@@ -1,20 +1,12 @@
 "use strict";
 
-function redditFeed(RedditService, $q, $scope) {  //nameDisplay is the name-display.js controller, I'm passing the NameService service function into the controller as a parameter
+function redditFeed(RedditService, $q, $scope) {
+    
     const ctrl = this;
     $scope.feed = [];//empty feed array to fill w/ reddit posts
 
-/*
-    ctrl.feed should be an array of obj (posts), like this:
-    ctrl.feed = [
-        {title: "",
-        imgURL: "",
-        link: ""}, rinse/repeat
-    ]
-*/
-
     ctrl.fillRedditFeed = (newThread) => {
-        $scope.feed = []; // resets the feed so that you don't just stack posts up, delete if you want a never ending page
+        $scope.feed = []; // resets the feed so that you don't just stack posts up, delete if you want to stack threads together
         return $q(function(resolve, reject) {  // $q sets up a promise, after redditAPI is called successfully it executes the then()
                 RedditService.callRedditApi(newThread)  // response is what the callRedditApi() returns?
                 .then( (response) => {
@@ -38,7 +30,11 @@ function redditFeed(RedditService, $q, $scope) {  //nameDisplay is the name-disp
                             resolve();
                         }
                     }
-                })  // so that it doesn't resolve before the loop has run
+                })
+            .catch( (err)=>{
+                alert("Either that isn't a thread ir Reddit's API dun goof'd");
+                reject();
+            })
         });
     }
 
@@ -47,11 +43,10 @@ function redditFeed(RedditService, $q, $scope) {  //nameDisplay is the name-disp
         .then( () => console.log('runRedditFeed() Success!'))  // confirms successful resolution of fillRedditFeed() promise ($q)
         .catch( (err) => {  // in case things go wrong
             console.error(err);  // logs the wrench in my gears
-            alert('runRedditFeed() failed');
         })
     }
 
-    // ctrl.runRedditFeed(aww);  // auto fills w/ default aww stuff specified in the service
+    ctrl.runRedditFeed("aww");   // auto fills w/ default aww stuff specified in the service
 
 }
 
@@ -74,6 +69,6 @@ angular
     `,
     controller: redditFeed,
     bindings: {
-        thread: "@" //    3. Create and modify the redditFeed component to take a one-way (<) or string (@) binding for the subreddit name?
+        thread: "@" // 3. Create and modify the redditFeed component to take a one-way (<) or string (@) binding for the subreddit name?
     }
 });
